@@ -1,10 +1,32 @@
 package _1_hello_world
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
-func Hello(name string) string {
+const (
+	spanish      = "spanish"
+	french       = "french"
+	englishHello = "Hello"
+	spanishHello = "Hola"
+	frenchHello  = "Bonjour"
+)
+
+func Hello(name string, language string) string {
 	if name == "" {
-		return "Hello, World!"
+		name = "World"
 	}
-	return fmt.Sprintf("Hello, %s!", name)
+
+	var greeting string
+	switch strings.ToLower(language) {
+	case spanish:
+		greeting = spanishHello
+	case french:
+		greeting = frenchHello
+	default:
+		greeting = englishHello
+	}
+
+	return fmt.Sprintf("%s, %s!", greeting, name)
 }
