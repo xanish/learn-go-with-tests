@@ -2,6 +2,12 @@ package _5_structs_methods_and_interfaces
 
 import "math"
 
+// Shape makes anything that has an Area and a Perimeter method a shape
+type Shape interface {
+	Area() float64
+	Perimeter() float64
+}
+
 type Rectangle struct {
 	Width, Height float64
 }
