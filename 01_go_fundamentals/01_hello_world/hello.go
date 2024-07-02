@@ -1,5 +1,7 @@
 package _1_hello_world
 
-func Hello() string {
-	return "Hello, world"
+import "fmt"
+
+func Hello(name string) string {
+	return fmt.Sprintf("Hello, %s!", name)
 }
