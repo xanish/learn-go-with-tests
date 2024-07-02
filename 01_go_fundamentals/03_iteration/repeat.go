@@ -1,8 +1,14 @@
 package _3_iteration
 
-func Repeat(character string) string {
+const defaultTimes = 5
+
+func Repeat(character string, times int) string {
+	if times == 0 {
+		times = defaultTimes
+	}
+
 	var repeated string
-	for i := 0; i < 5; i++ {
+	for i := 0; i < times; i++ {
 		repeated = repeated + character
 	}
 	return repeated
