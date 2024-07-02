@@ -10,6 +10,7 @@ func TestPerimeter(t *testing.T) {
 	}{
 		{name: "Rectangle", shape: Rectangle{10.0, 10.0}, hasPerimeter: 40.0},
 		{name: "Circle", shape: Circle{10.0}, hasPerimeter: 62.83185307179586},
+		{name: "Triangle", shape: Triangle{Base: 12, Height: 4.87, Side1: 5, Side2: 14}, hasPerimeter: 31.0},
 	}
 
 	for _, tt := range tests {
@@ -39,6 +40,7 @@ func TestArea(t *testing.T) {
 	}{
 		{name: "Rectangle", shape: Rectangle{Width: 12, Height: 6}, hasArea: 72.0},
 		{name: "Circle", shape: Circle{Radius: 10}, hasArea: 314.1592653589793},
+		{name: "Triangle", shape: Triangle{Base: 12, Height: 4.87, Side1: 5, Side2: 14}, hasArea: 29.22},
 	}
 
 	for _, tt := range tests {
