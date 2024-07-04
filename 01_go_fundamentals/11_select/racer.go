@@ -1,28 +1,27 @@
 package _1_select
 
 import (
+	"math"
 	"net/http"
 	"time"
 )
 
-func Racer(a, b string) (string, error) {
-	startA := time.Now()
-	_, err := http.Get(a)
-	if err != nil {
-		return "", err
-	}
-	aDuration := time.Since(startA)
-
-	startB := time.Now()
-	_, err = http.Get(b)
-	if err != nil {
-		return "", err
-	}
-	bDuration := time.Since(startB)
+func Racer(a, b string) string {
+	aDuration, _ := measureResponseTime(a)
+	bDuration, _ := measureResponseTime(b)
 
 	if aDuration < bDuration {
-		return a, nil
+		return a
 	}
 
-	return b, nil
+	return b
+}
+
+func measureResponseTime(url string) (time.Duration, error) {
+	start := time.Now()
+	_, err := http.Get(url)
+	if err != nil {
+		return math.MaxInt, err
+	}
+	return time.Since(start), nil
 }
