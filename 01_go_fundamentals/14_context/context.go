@@ -8,11 +8,25 @@ import (
 // Store fetches data.
 type Store interface {
 	Fetch() string
+	Cancel()
 }
 
 // Server returns a handler for calling Store.
 func Server(store Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprint(w, store.Fetch())
+		ctx := r.Context()
+
+		data := make(chan string, 1)
+
+		go func() {
+			data <- store.Fetch()
+		}()
+
+		select {
+		case d := <-data:
+			_, _ = fmt.Fprint(w, d)
+		case <-ctx.Done():
+			store.Cancel()
+		}
 	}
 }
