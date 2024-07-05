@@ -13,12 +13,16 @@ const (
 	frenchHello  = "Bonjour"
 )
 
+// Hello generates a greeting message in the specified language.
+// If the name is empty, it defaults to "World".
 func Hello(name string, language string) string {
 	if name == "" {
 		name = "World"
 	}
 
 	var greeting string
+
+	// switch cases in golang don't fall through
 	switch strings.ToLower(language) {
 	case spanish:
 		greeting = spanishHello
