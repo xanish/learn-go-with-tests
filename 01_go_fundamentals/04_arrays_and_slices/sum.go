@@ -1,5 +1,6 @@
 package _4_arrays_and_slices
 
+// Sum calculates the sum of all numbers in the given slice of integers.
 func Sum(numbers []int) int {
 	var result int
 	for _, number := range numbers {
@@ -8,6 +9,8 @@ func Sum(numbers []int) int {
 	return result
 }
 
+// SumAll calculates the sum of each slice of integers provided as variadic arguments.
+// It returns a slice containing the sums of each input slice.
 func SumAll(numbers ...[]int) []int {
 	var result []int
 
@@ -18,6 +21,9 @@ func SumAll(numbers ...[]int) []int {
 	return result
 }
 
+// SumAllTails calculates the sum of all tails (sub-slices excluding the first element)
+// of each slice of integers provided as variadic arguments.
+// It returns a slice containing the sums of tails for each input slice.
 func SumAllTails(numbers ...[]int) []int {
 	var result []int
 	for _, slice := range numbers {
