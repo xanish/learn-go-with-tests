@@ -4,7 +4,7 @@ import "strings"
 
 // RomanNumeral represents a mapping between an integer value and its Roman numeral symbol.
 type RomanNumeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 
@@ -26,7 +26,7 @@ var RomanNumerals = []RomanNumeral{
 }
 
 // ConvertToRoman converts an integer (arabic) into its Roman numeral representation.
-func ConvertToRoman(arabic int) string {
+func ConvertToRoman(arabic uint16) string {
 	// Initialize a strings.Builder to efficiently construct the result.
 	var result strings.Builder
 
@@ -42,8 +42,8 @@ func ConvertToRoman(arabic int) string {
 	return result.String()
 }
 
-func ConvertToArabic(roman string) int {
-	var arabic = 0
+func ConvertToArabic(roman string) uint16 {
+	var arabic uint16 = 0
 
 	for _, numeral := range RomanNumerals {
 		// Continue adding the numeral's value to arabic while the roman string

@@ -3,11 +3,12 @@ package _5_intro_to_property_based_tests
 import (
 	"fmt"
 	"testing"
+	"testing/quick"
 )
 
 var (
 	cases = []struct {
-		Arabic int
+		Arabic uint16
 		Roman  string
 	}{
 		{Arabic: 1, Roman: "I"},
@@ -61,5 +62,28 @@ func TestConvertToArabic(t *testing.T) {
 				t.Errorf("got %d, want %d", got, test.Arabic)
 			}
 		})
+	}
+}
+
+func TestPropertiesOfConversion(t *testing.T) {
+	// The test ensures that the conversion functions work correctly within the valid range of Roman numerals (1 to 3999).
+	// It uses the quick.Check function from the testing/quick package to perform property-based testing,
+	// with a maximum count of 1000 random test cases.
+	// Property based testing basically generates random values that satisfy the properties that you define
+	// for the value in your domain and then test your functions based on those generated values.
+	assertion := func(arabic uint16) bool {
+		if arabic < 0 || arabic > 3999 {
+			return true
+		}
+		t.Log("testing", arabic)
+		roman := ConvertToRoman(arabic)
+		fromRoman := ConvertToArabic(roman)
+		return fromRoman == arabic
+	}
+
+	if err := quick.Check(assertion, &quick.Config{
+		MaxCount: 1000,
+	}); err != nil {
+		t.Error("failed checks", err)
 	}
 }
