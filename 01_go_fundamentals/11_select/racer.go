@@ -8,11 +8,15 @@ import (
 
 var tenSecondTimeout = 10 * time.Second
 
-func Racer(a, b string) (winner string, error error) {
+// Racer performs a URL race between two URLs with a default timeout of 10 seconds.
+func Racer(a, b string) (winner string, err error) {
 	return ConfigurableRacer(a, b, tenSecondTimeout)
 }
 
+// ConfigurableRacer performs a URL race between two URLs with a configurable timeout.
 func ConfigurableRacer(a, b string, timeout time.Duration) (string, error) {
+	// The select statement allows us to wait on multiple communication operations.
+	// If multiple cases trigger at the same time select picks in random order.
 	select {
 	case <-ping(a):
 		return a, nil
@@ -23,6 +27,7 @@ func ConfigurableRacer(a, b string, timeout time.Duration) (string, error) {
 	}
 }
 
+// ping sends an HTTP GET request to a URL in a goroutine and returns a channel.
 func ping(url string) chan struct{} {
 	ch := make(chan struct{})
 	go func() {
