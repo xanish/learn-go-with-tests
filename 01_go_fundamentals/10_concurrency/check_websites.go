@@ -16,6 +16,9 @@ func CheckWebsites(wc WebsiteChecker, urls []string) map[string]bool {
 
 	for _, url := range urls {
 		go func(u string) {
+			// resultChannel is an unbuffered channel hence this statement
+			// will block everytime an entry is added to the channel until
+			// that entry gets read by the loop reading from resultChannel.
 			resultChannel <- result{u, wc(u)}
 		}(url)
 	}
