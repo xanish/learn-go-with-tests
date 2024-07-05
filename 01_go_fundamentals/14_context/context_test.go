@@ -17,10 +17,11 @@ type SpyStore struct {
 
 // Fetch returns response after a short delay.
 func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
-	data := make(chan string, 1)
+	data := make(chan string, 1) // Buffered channel to hold fetched data asynchronously
 
 	go func() {
 		var result string
+		// Iterate over each character in the simulated response
 		for _, c := range s.response {
 			select {
 			case <-ctx.Done():
@@ -31,6 +32,7 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 				result += string(c)
 			}
 		}
+		// Send the accumulated result through the channel
 		data <- result
 	}()
 
@@ -42,9 +44,10 @@ func (s *SpyStore) Fetch(ctx context.Context) (string, error) {
 	}
 }
 
-// SpyResponseWriter checks whether a response has been written.
+// SpyResponseWriter checks whether a response has been written. Since SpyResponseWriter
+// is a mock for ResponseWriter it needs to have the methods Header, WriteHeader and Write.
 type SpyResponseWriter struct {
-	written bool
+	written bool // Flag to indicate if response has been written
 }
 
 // Header will mark written to true.
@@ -69,13 +72,17 @@ func TestServer(t *testing.T) {
 
 	t.Run("returns data from store", func(t *testing.T) {
 		store := &SpyStore{response: data}
+
+		// Create a server instance using the SpyStore
 		svr := Server(store)
 
+		// Mock HTTP request and response recorder
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
 		response := httptest.NewRecorder()
 
 		svr.ServeHTTP(response, request)
 
+		// Check if the response body matches the expected data
 		if response.Body.String() != data {
 			t.Errorf(`got "%s", want "%s"`, response.Body.String(), data)
 		}
@@ -87,14 +94,17 @@ func TestServer(t *testing.T) {
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
 
+		// Create a context that will be cancelled after 5 milliseconds
 		cancellingCtx, cancel := context.WithCancel(request.Context())
+		// Cancel context after 5 milliseconds
 		time.AfterFunc(5*time.Millisecond, cancel)
+		// Assign the cancelling context to the request
 		request = request.WithContext(cancellingCtx)
 
 		response := &SpyResponseWriter{}
-
 		svr.ServeHTTP(response, request)
 
+		// Verify that no response has been written
 		if response.written {
 			t.Error("a response should not have been written")
 		}
